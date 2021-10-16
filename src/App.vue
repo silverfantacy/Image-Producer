@@ -197,8 +197,8 @@ export default {
     function insertImg() {
       fabric.Image.fromURL(state.selected_img.url, function (image) {
 
-        // let icon_ize = 200
-        // let scale = this.width > this.height ? icon_ize / this.width : icon_ize / this.height
+        let icon_ize = 200
+        let scale = image.width > image.height ? icon_ize / image.width : icon_ize / image.height
         image.set({
           angle     : 0,
           padding   : 0,
@@ -209,8 +209,8 @@ export default {
           borderColor        : 'red',
           centeredScaling    : true,
           minimumScaleTrigger: 1,
-          // scaleX             : scale,
-          // scaleY             : scale
+          scaleX             : scale,
+          scaleY             : scale
         });
 
         canvas.centerObject(image);
