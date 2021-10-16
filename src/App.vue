@@ -231,6 +231,25 @@ export default {
       // 啟動 canvas
       canvas = new fabric.Canvas(c.value);
 
+      let imageUrl = '/image/background.png'
+      // canvas.setBackgroundImage(imageUrl, canvas.renderAll.bind(canvas), {
+      //   width: canvas.width,
+      //   height: canvas.height,
+      //   // Optionally add an opacity lvl to the image
+      //   backgroundImageOpacity: 1,
+      //   // should the image be resized to fit the container?
+      //   backgroundImageStretch: true,
+      //   crossOrigin: 'Anonymous',
+      //   repeat: 'repeat'
+      // });
+
+      canvas.setBackgroundColor({
+        source: imageUrl,
+        repeat: 'repeat',
+        // offsetX: 200,
+        // offsetY: 100
+      }, canvas.renderAll.bind(canvas));
+
       // 鐵人賽特效測試，會造成畫面污染問題
       // fabric.util.loadImage('https://www.pakutaso.com/shared/img/thumb/KAZTDSCF2521_TP_V4.jpg', function (img) {
       //   // 新增一個 pattern 物件
@@ -284,7 +303,7 @@ export default {
 }
 
 body {
-  background-image: url("https://drive.google.com/uc?export=view&id=0B3ubyt3iIvkaSjRtQThYR1ZTRGs");
+  /*background-image: url("https://drive.google.com/uc?export=view&id=0B3ubyt3iIvkaSjRtQThYR1ZTRGs");*/
 }
 
 .hideOperations {
@@ -301,11 +320,10 @@ body {
 }
 
 .controls {
-  width: 100px;
   /*overflow: hidden;*/
   position: fixed;
-  right: 10px;
-  top: 10px;
+  right: 2rem;
+  top: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
