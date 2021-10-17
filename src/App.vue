@@ -198,11 +198,8 @@ export default {
     }
 
     function onObjectSelected(e) {
-      if (e.target.get("type") === "i-text") {
-        state.hideOperations = false;
-      } else {
-        // do nothing.
-      }
+      console.log('f')
+      state.hideOperations = e.target.get("type") !== "i-text";
     }
 
 
@@ -386,7 +383,11 @@ export default {
       })
 
       // 文字控制
+      // 選擇監測
       canvas.on("selection:created", onObjectSelected);
+      // 選擇切換監測
+      canvas.on("selection:updated", onObjectSelected);
+      // 選擇結束監測
       canvas.on("before:selection:cleared", function () {
         state.hideOperations = true
       });
