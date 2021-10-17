@@ -7,7 +7,8 @@
   </div>
 
   <div class="controls">
-    <input type="file" id="imgLoader" @change="handleImage" class="d-none"/>
+    <input type="file" id="imgLoader" @change="handleImage" class="d-none"
+           accept=".jpg, .jpeg, .png, .bmp"/>
 
     <label for="imgLoader" title="新增"
            class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center">
