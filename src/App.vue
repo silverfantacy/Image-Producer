@@ -400,7 +400,7 @@ export default {
       canvas,
       bucketModal,
       dom_textMenu,
-      
+
       handleImage,
       insertText,
       deleteObjects,
