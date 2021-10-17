@@ -20,6 +20,10 @@
       <font-awesome-icon icon="images" size="lg" fixed-width/>
     </button>
     <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
+            title="文字" @click="insertText">
+      <font-awesome-icon icon="font" size="lg" fixed-width/>
+    </button>
+    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
             title="刪除" @click="deleteObjects">
       <font-awesome-icon icon="trash-alt" size="lg" fixed-width/>
     </button>
@@ -94,32 +98,8 @@ export default {
       selected_img: [],
     })
 
-    function deleteObjects() {
-      let activeObject = canvas.getActiveObject(),
-          activeGroup  = canvas.getActiveObjects();
-      if (activeGroup.length === 1) {
-        if (
-            confirm(
-                "確定要刪除圖片嗎？"
-            )
-        ) {
-          canvas.remove(activeObject);
-        }
-      } else if (activeGroup.length > 1) {
-        if (
-            confirm(
-                "確定要刪除選取的圖片嗎？"
-            )
-        ) {
-          activeGroup.forEach(function (object) {
-            canvas.remove(object);
-          });
-        }
-      }
-    }
 
     //upload image
-
     function handleImage(e) {
       let reader = new FileReader();
       reader.onload = function (event) {
@@ -167,6 +147,38 @@ export default {
     //   document.getElementById("textMenu").className = "hideOperations";
     // });
 
+    // 插入文字
+    function insertText() {
+      let text = new fabric.IText('hello world', { left: 40, top: 100 });
+      canvas.add(text);
+    }
+
+    // 刪除物件
+    function deleteObjects() {
+      let activeObject = canvas.getActiveObject(),
+          activeGroup  = canvas.getActiveObjects();
+      if (activeGroup.length === 1) {
+        if (
+            confirm(
+                "確定要刪除此物件嗎？"
+            )
+        ) {
+          canvas.remove(activeObject);
+        }
+      } else if (activeGroup.length > 1) {
+        if (
+            confirm(
+                "確定要刪除多個物件嗎？"
+            )
+        ) {
+          activeGroup.forEach(function (object) {
+            canvas.remove(object);
+          });
+        }
+      }
+    }
+
+    // 輸出圖片
     function output(formatType) {
       const dataURL = canvas.toDataURL({
         format    : `image/${formatType}`,
@@ -185,6 +197,7 @@ export default {
       document.body.removeChild(a)
     }
 
+    // 選擇 bucket 圖片
     function selected(item) {
       if (state.selected_img) {
         state.selected_img.selected = false
@@ -195,6 +208,7 @@ export default {
 
     }
 
+    // 從 bucket 插入選擇的圖片
     function insertImg() {
       fabric.Image.fromURL(state.selected_img.url, function (image) {
 
@@ -284,8 +298,9 @@ export default {
       state,
       canvas,
       bucketModal,
-      deleteObjects,
       handleImage,
+      insertText,
+      deleteObjects,
       output,
       selected,
       insertImg
