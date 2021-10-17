@@ -6,6 +6,7 @@
     </div>
   </div>
 
+  <!-- 操作列 -->
   <div class="controls">
     <input type="file" id="imgLoader" @change="handleImage" class="d-none"
            accept=".jpg, .jpeg, .png, .bmp"/>
@@ -39,6 +40,42 @@
   <!-- <img alt="Vue logo" src="./assets/logo.png" />
     <HelloWorld msg="Welcome to Your Vue.js App" /> -->
 
+  <!-- 控制選項 -->
+  <div id="textMenu" class="container-fluid d-flex flex-column flex-md-row justify-content-between"
+       :class="{'d-none':state.hideOperations}" ref="textMenu">
+    <div class="row">
+      <div class="col-6">
+        <input type="range" min="5" max="150" value="40" id="size" class="form-range" @change="addHandler">
+      </div>
+      <div class="col-6">
+        <input type="range" min="0.1" max="5" value="0.1" id="height" class="form-range" @change="addHandler">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3"><input type="color" id="color" class="form-control form-control-color"
+                                v-model="state.control.color"></div>
+      <div class="col-3"><input type="color" id="bg-color" class="form-control form-control-color"
+                                v-model="state.control.bgColor"></div>
+      <div class="col-3">
+        <button id="underline" class="btn btn-primary btn-sm" @click="addHandler">底線</button>
+      </div>
+      <div class="col-3">
+        <button id="italic" class="btn btn-primary btn-sm" @click="addHandler">斜體</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <button id="center" class="btn btn-primary btn-sm" @click="addHandler">文字置中</button>
+      </div>
+      <div class="col-4">
+        <button id="left" class="btn btn-primary btn-sm" @click="addHandler">文字置左</button>
+      </div>
+      <div class="col-4">
+        <button id="right" class="btn btn-primary btn-sm" @click="addHandler">文字置右</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal -->
   <div class="modal fade" id="bucketModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
        aria-labelledby="bucketModalLabel" aria-hidden="true" ref="bucket">
@@ -71,7 +108,7 @@
 
 <script>
 // import HelloWorld from "./components/HelloWorld.vue";
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {fabric} from 'fabric'
 import image_lists from './image_url.json'
 import {Modal} from 'bootstrap'
@@ -84,19 +121,46 @@ export default {
   setup() {
     const c = ref(null);
     const bucket = ref(null);
+    const dom_textMenu = ref(null);
     let canvas
     let bucketModal
     const state = reactive({
       // width : 260,
       // height: 360
-      width       : window.innerWidth,
-      height      : window.innerHeight,
-      bucket_data : image_lists.map(item => {
+      width         : window.innerWidth,
+      height        : window.innerHeight,
+      bucket_data   : image_lists.map(item => {
         item.selected = false;
         return item
       }),
-      selected_img: [],
+      selected_img  : [],
+      hideOperations: true,
+      control       : {
+        color  : '#000000',
+        bgColor: '#000000'
+      }
     })
+
+    watch(
+        () => state.control.color,
+        (count) => {
+          let obj = canvas.getActiveObject()
+          obj.set({
+            fill: count,
+          })
+          canvas.renderAll()
+        }
+    )
+    watch(
+        () => state.control.bgColor,
+        (count) => {
+          let obj = canvas.getActiveObject()
+          obj.set({
+            textBackgroundColor: count
+          })
+          canvas.renderAll()
+        }
+    )
 
 
     //upload image
@@ -133,24 +197,53 @@ export default {
       reader.readAsDataURL(e.target.files[0]);
     }
 
-    // function onObjectSelected(e) {
-    //   if (e.target.get("type") === "i-text") {
-    //     document.getElementById("textMenu").className = "displayOperations";
-    //   } else {
-    //     // do nothing.
-    //   }
-    // }
+    function onObjectSelected(e) {
+      if (e.target.get("type") === "i-text") {
+        state.hideOperations = false;
+      } else {
+        // do nothing.
+      }
+    }
 
-    // canvas.on("object:selected", onObjectSelected);
-
-    // canvas.on("before:selection:cleared", function () {
-    //   document.getElementById("textMenu").className = "hideOperations";
-    // });
 
     // 插入文字
     function insertText() {
-      let text = new fabric.IText('hello world', { left: 40, top: 100 });
+      let text = new fabric.IText('hello world', {
+        left: 40,
+        top : 100,
+        // underline: true,
+        fill: 'white'
+      });
       canvas.add(text);
+    }
+
+    function addHandler(e) {
+      // console.log('styleName',e)
+      let styleName = e.target.id
+      let obj = canvas.getActiveObject()
+      let params = []
+      switch (styleName) {
+        case 'underline':
+          params[styleName] = !obj[styleName]
+          break
+        case 'italic':
+          params['fontStyle'] = obj['fontStyle'] === 'normal' ? 'italic' : 'normal'
+          break
+        case 'center':
+        case 'left':
+        case 'right':
+          params['textAlign'] = styleName
+          break
+        case 'size':
+          params['fontSize'] = e.target.value
+          break
+        case 'height':
+          params['lineHeight'] = e.target.value
+          break
+      }
+
+      obj.set(params)
+      canvas.renderAll()
     }
 
     // 刪除物件
@@ -246,6 +339,7 @@ export default {
       // 啟動 canvas
       canvas = new fabric.Canvas(c.value);
 
+      // 添加背景圖片
       let imageUrl = '/image/background.png'
       // canvas.setBackgroundImage(imageUrl, canvas.renderAll.bind(canvas), {
       //   width: canvas.width,
@@ -290,6 +384,13 @@ export default {
         state.selected_img.selected = false
         state.selected_img = []
       })
+
+      // 文字控制
+      canvas.on("selection:created", onObjectSelected);
+      canvas.on("before:selection:cleared", function () {
+        state.hideOperations = true
+      });
+
     });
 
     return {
@@ -298,12 +399,16 @@ export default {
       state,
       canvas,
       bucketModal,
+      dom_textMenu,
+      
       handleImage,
       insertText,
       deleteObjects,
       output,
       selected,
-      insertImg
+      insertImg,
+
+      addHandler,
     };
   },
 };
@@ -447,4 +552,12 @@ body {
   bottom: 0;
 }
 
+
+/* textMenu */
+#textMenu {
+  position: fixed;
+  bottom: 2rem;
+  width: 100%;
+
+}
 </style>
