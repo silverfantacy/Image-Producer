@@ -10,6 +10,9 @@
   <div class="controls">
     <input type="file" id="imgLoader" @change="handleImage" class="d-none"
            accept=".jpg, .jpeg, .png, .bmp"/>
+    <input type="file" id="bgImgLoader" @change="handleBgImage" class="d-none"
+           accept=".jpg, .jpeg, .png, .bmp"/>
+
 
     <label for="imgLoader" title="新增"
            class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center">
@@ -28,6 +31,10 @@
             title="刪除" @click="deleteObjects">
       <font-awesome-icon icon="trash-alt" size="lg" fixed-width/>
     </button>
+    <label for="bgImgLoader" title="新增背景"
+           class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center">
+      <font-awesome-icon icon="plus-square" size="lg" fixed-width/>
+    </label>
     <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
             title="移除背景" @click="clearCanvasBackground">
       <font-awesome-icon icon="chess-board" size="lg" fixed-width/>
@@ -196,6 +203,40 @@ export default {
           canvas.add(image);
           // console.log(image)
           canvas.renderAll();
+        };
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+
+    function handleBgImage(e) {
+      clearCanvasBackground()
+      
+      let reader = new FileReader();
+      reader.onload = function (event) {
+        let imgObj = new Image();
+        imgObj.src = event.target.result;
+        imgObj.onload = function () {
+          // alert(this.width + 'x' + this.height);
+          // let image = new fabric.Image(imgObj);
+          // canvas.setBackgroundColor({
+          //   source: event.target.result,
+          //   repeat: 'no-repeat',
+          //   // offsetX: 200,
+          //   // offsetY: 100
+          // }, canvas.renderAll.bind(canvas));
+          let scale = this.width > this.height ? canvas.width / this.width : canvas.height / this.height
+
+          canvas.setBackgroundImage(event.target.result, canvas.renderAll.bind(canvas), {
+            
+            // Needed to position backgroundImage at 0/0
+            originX: 'left',
+            originY: 'top',
+            left: (canvas.width / 2) - (this.width * scale /2),
+            top: (canvas.height / 2) - (this.height * scale /2),
+            scaleX             : scale,
+            scaleY             : scale
+          });
+
         };
       };
       reader.readAsDataURL(e.target.files[0]);
@@ -414,6 +455,7 @@ export default {
       dom_textMenu,
 
       handleImage,
+      handleBgImage,
       insertText,
       deleteObjects,
       output,
