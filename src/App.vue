@@ -29,6 +29,10 @@
       <font-awesome-icon icon="trash-alt" size="lg" fixed-width/>
     </button>
     <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
+            title="移除背景" @click="clearCanvasBackground">
+      <font-awesome-icon icon="chess-board" size="lg" fixed-width/>
+    </button>
+    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
             title="匯出 jpg" @click="output('jpeg')">
       <font-awesome-icon icon="save" size="lg" fixed-width/>
     </button>
@@ -209,7 +213,7 @@ export default {
         left: 40,
         top : 100,
         // underline: true,
-        fill: 'white'
+        fill: !canvas.backgroundColor && !canvas.backgroundImage ? 'black' : 'white'
       });
       canvas.add(text);
     }
@@ -331,6 +335,13 @@ export default {
       });
     }
 
+    // clearCanvasBackground
+    function clearCanvasBackground() {
+      canvas.setBackgroundImage(null);
+      canvas.setBackgroundColor('');
+      canvas.renderAll();
+    }
+
     // mounted
     onMounted(() => {
       // 啟動 canvas
@@ -410,6 +421,7 @@ export default {
       insertImg,
 
       addHandler,
+      clearCanvasBackground
     };
   },
 };
