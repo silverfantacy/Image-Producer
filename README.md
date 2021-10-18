@@ -1,4 +1,4 @@
-# set_my_image
+# Image Producer
 
 ## Project setup
 ```
