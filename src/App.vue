@@ -47,6 +47,14 @@
             title="匯出 png" @click="output('png')">
       <font-awesome-icon icon="save" size="lg" fixed-width/>
     </button>
+    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
+            title="返回" @click="doUndo()">
+      <font-awesome-icon icon="undo" size="lg" fixed-width/>
+    </button>
+    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
+            title="重做" @click="doRedo()">
+      <font-awesome-icon icon="redo" size="lg" fixed-width/>
+    </button>
   </div>
   <!-- <img alt="Vue logo" src="./assets/logo.png" />
     <HelloWorld msg="Welcome to Your Vue.js App" /> -->
@@ -149,7 +157,9 @@ export default {
       control       : {
         color  : '#000000',
         bgColor: '#000000'
-      }
+      },
+      undo: [],
+      redo: []
     })
 
     watch(
@@ -176,6 +186,9 @@ export default {
 
     //upload image
     function handleImage(e) {
+      // 紀錄
+      statusSave()
+
       let reader = new FileReader();
       reader.onload = function (event) {
         let imgObj = new Image();
@@ -209,6 +222,9 @@ export default {
     }
 
     function handleBgImage(e) {
+      // 紀錄
+      statusSave()
+
       clearCanvasBackground()
       
       let reader = new FileReader();
@@ -243,13 +259,15 @@ export default {
     }
 
     function onObjectSelected(e) {
-      console.log('f')
       state.hideOperations = e.target.get("type") !== "i-text";
     }
 
 
     // 插入文字
     function insertText() {
+      // 紀錄
+      statusSave()
+
       let text = new fabric.IText('hello world', {
         left: 40,
         top : 100,
@@ -260,6 +278,9 @@ export default {
     }
 
     function addHandler(e) {
+      // 紀錄
+      statusSave()
+
       // console.log('styleName',e)
       let styleName = e.target.id
       let obj = canvas.getActiveObject()
@@ -290,6 +311,9 @@ export default {
 
     // 刪除物件
     function deleteObjects() {
+      // 紀錄
+      statusSave()
+
       let activeObject = canvas.getActiveObject(),
           activeGroup  = canvas.getActiveObjects();
       if (activeGroup.length === 1) {
@@ -345,6 +369,9 @@ export default {
 
     // 從 bucket 插入選擇的圖片
     function insertImg() {
+      // 紀錄
+      statusSave()
+
       fabric.Image.fromURL(state.selected_img.url, function (image) {
 
         let icon_ize = 200
@@ -378,15 +405,44 @@ export default {
 
     // clearCanvasBackground
     function clearCanvasBackground() {
+      // 紀錄
+      statusSave()
+
       canvas.setBackgroundImage(null);
       canvas.setBackgroundColor('');
       canvas.renderAll();
+    }
+
+    // doUndo 
+    function doUndo () {
+      // 取出 undo 最後一筆資料讀取
+      let lastJSON = state.undo.pop()
+      if(!lastJSON) return alert('沒有上一步了')
+      canvas.loadFromJSON(lastJSON)
+      // 換成上一步的狀態
+      state.redo.push(lastJSON)
+    }
+
+    // doRedo
+    function doRedo () {
+      let lastJSON = state.redo.pop()
+      if(!lastJSON) return alert('目前沒有動作可復原')
+      canvas.loadFromJSON(lastJSON)
+      // 在做下一步時把目前狀態 push 到 undo 陣列
+      state.undo.push(lastJSON)
+    }
+
+    // status save
+    function statusSave() {
+      state.undo.push(canvas.toJSON()); // 導出的Json
+      state.redo = []
     }
 
     // mounted
     onMounted(() => {
       // 啟動 canvas
       canvas = new fabric.Canvas(c.value);
+      canvas.preserveObjectStacking = true // 禁止選中圖層時自定置於頂部
 
       // 添加背景圖片
       let imageUrl = '/image/background.png'
@@ -443,6 +499,10 @@ export default {
       canvas.on("before:selection:cleared", function () {
         state.hideOperations = true
       });
+      // 監聽畫布的圖層編輯事件
+      canvas.on('object:modified', () => {
+        statusSave()
+      });
 
     });
 
@@ -463,7 +523,9 @@ export default {
       insertImg,
 
       addHandler,
-      clearCanvasBackground
+      clearCanvasBackground,
+      doUndo,
+      doRedo
     };
   },
 };
