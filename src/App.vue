@@ -39,6 +39,14 @@
             title="移除背景" @click="clearCanvasBackground">
       <font-awesome-icon icon="chess-board" size="lg" fixed-width/>
     </button>
+    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center" :class="{'d-none': !state.selected_obj_class}"
+            title="上移" @click="bringForward">
+      <font-awesome-icon icon="caret-square-up" size="lg" fixed-width/>
+    </button>
+    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center" :class="{'d-none': !state.selected_obj_class}"
+            title="下移" @click="sendBackwards">
+      <font-awesome-icon icon="caret-square-down" size="lg" fixed-width/>
+    </button>
     <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
             title="匯出 jpg" @click="output('jpeg')">
       <font-awesome-icon icon="save" size="lg" fixed-width/>
@@ -159,7 +167,8 @@ export default {
         bgColor: '#000000'
       },
       undo: [],
-      redo: []
+      redo: [],
+      selected_obj_class: false
     })
 
     watch(
@@ -259,6 +268,7 @@ export default {
     }
 
     function onObjectSelected(e) {
+      state.selected_obj_class = true
       state.hideOperations = e.target.get("type") !== "i-text";
     }
 
@@ -438,6 +448,18 @@ export default {
       state.redo = []
     }
 
+    // 上移
+    function bringForward() {
+      statusSave()
+      canvas.getActiveObject().bringForward();
+    }
+
+    // 下移
+    function sendBackwards() {
+      statusSave()
+      canvas.getActiveObject().sendBackwards();
+    }
+
     // mounted
     onMounted(() => {
       // 啟動 canvas
@@ -497,6 +519,7 @@ export default {
       canvas.on("selection:updated", onObjectSelected);
       // 選擇結束監測
       canvas.on("before:selection:cleared", function () {
+        state.selected_obj_class = false
         state.hideOperations = true
       });
       // 監聽畫布的圖層編輯事件
@@ -525,7 +548,9 @@ export default {
       addHandler,
       clearCanvasBackground,
       doUndo,
-      doRedo
+      doRedo,
+      bringForward,
+      sendBackwards
     };
   },
 };
