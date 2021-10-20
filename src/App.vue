@@ -7,14 +7,36 @@
   </div>
 
   <!-- 操作列 -->
+  <div class="base" :class="{ 'close' : state.open}">
+   <div class="menu" @click="state.open = !state.open">
+      <div class="icon">
+         <div class="bar"></div>
+      </div>
+   </div>
+   <div class="icons">
+      <font-awesome-icon icon="images"/>
+      <font-awesome-icon icon="font"/>
+      <font-awesome-icon icon="save"/>
+   </div>
+   <div class="section">
+      <div class="cover1">
+         <div class="cover2">
+            <a class="content" @click="insertText();state.open = false"></a>
+         </div>
+      </div>
+   </div>
+   <a class="section-static top" title="圖庫"
+            data-bs-toggle="offcanvas" data-bs-target="#bucketModal" aria-controls="offcanvasBottom"></a>
+   <a class="section-static bottom" @click="output('png');state.open = false"></a>
+  </div>
+
   <div class="controls">
     <input type="file" id="imgLoader" @change="handleImage" class="d-none"
            accept=".jpg, .jpeg, .png, .bmp"/>
     <input type="file" id="bgImgLoader" @change="handleBgImage" class="d-none"
            accept=".jpg, .jpeg, .png, .bmp"/>
 
-
-    <label for="imgLoader" title="新增"
+    <!-- <label for="imgLoader" title="新增"
            class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center">
       <font-awesome-icon icon="plus" size="lg" fixed-width/>
     </label>
@@ -26,18 +48,19 @@
     <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
             title="文字" @click="insertText">
       <font-awesome-icon icon="font" size="lg" fixed-width/>
-    </button>
-    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
-            title="刪除" @click="deleteObjects">
-      <font-awesome-icon icon="trash-alt" size="lg" fixed-width/>
-    </button>
-    <label for="bgImgLoader" title="新增背景"
+    </button> -->
+    
+    <!-- <label for="bgImgLoader" title="新增背景"
            class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center">
       <font-awesome-icon icon="plus-square" size="lg" fixed-width/>
-    </label>
+    </label> -->
     <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
             title="移除背景" @click="clearCanvasBackground">
       <font-awesome-icon icon="chess-board" size="lg" fixed-width/>
+    </button>
+    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center" :class="{'d-none': !state.selected_obj_class}"
+            title="刪除" @click="deleteObjects">
+      <font-awesome-icon icon="trash-alt" size="lg" fixed-width/>
     </button>
     <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center" :class="{'d-none': !state.selected_obj_class}"
             title="上移" @click="bringForward">
@@ -47,14 +70,14 @@
             title="下移" @click="sendBackwards">
       <font-awesome-icon icon="caret-square-down" size="lg" fixed-width/>
     </button>
-    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
+    <!-- <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
             title="匯出 jpg" @click="output('jpeg')">
       <font-awesome-icon icon="save" size="lg" fixed-width/>
     </button>
     <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
             title="匯出 png" @click="output('png')">
       <font-awesome-icon icon="save" size="lg" fixed-width/>
-    </button>
+    </button> -->
     <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
             title="返回" @click="doUndo()">
       <font-awesome-icon icon="undo" size="lg" fixed-width/>
@@ -68,17 +91,17 @@
     <HelloWorld msg="Welcome to Your Vue.js App" /> -->
 
   <!-- 控制選項 -->
-  <div id="textMenu" class="container-fluid d-flex flex-column flex-md-row justify-content-between"
+  <div id="textMenu" class="container-fluid d-flex flex-row justify-content-center"
        :class="{'d-none':state.hideOperations}" ref="textMenu">
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-6">
         <input type="range" min="5" max="150" value="40" id="size" class="form-range" @change="addHandler">
       </div>
       <div class="col-6">
         <input type="range" min="0.1" max="5" value="0.1" id="height" class="form-range" @change="addHandler">
       </div>
-    </div>
-    <div class="row">
+    </div> -->
+    <!-- <div class="row">
       <div class="col-3"><input type="color" id="color" class="form-control form-control-color"
                                 v-model="state.control.color"></div>
       <div class="col-3"><input type="color" id="bg-color" class="form-control form-control-color"
@@ -89,8 +112,8 @@
       <div class="col-3">
         <button id="italic" class="btn btn-primary btn-sm" @click="addHandler">斜體</button>
       </div>
-    </div>
-    <div class="row">
+    </div> -->
+    <!-- <div class="row">
       <div class="col-4">
         <button id="center" class="btn btn-primary btn-sm" @click="addHandler">文字置中</button>
       </div>
@@ -100,19 +123,49 @@
       <div class="col-4">
         <button id="right" class="btn btn-primary btn-sm" @click="addHandler">文字置右</button>
       </div>
+    </div> -->
+
+    <!-- <div class="row">
+      <div class="col-6 d-flex align-items-center">
+        <label for="color" class="text-white me-2">文字尺寸</label>
+        <input type="range" min="5" max="150" value="40" id="size" class="form-range" @change="addHandler">
+      </div>
+      <div class="col-6 d-flex align-items-center">
+        <label for="bg-color" class="text-white me-2">文字行高</label>
+        <input type="range" min="0.1" max="5" value="0.1" id="height" class="form-range" @change="addHandler">
+      </div>
+    </div> -->
+    
+    <div class="d-flex flex-wrap justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
+      <div class="btn-group m-2 align-items-center" role="group" aria-label="Second group">
+        <label for="color" class="text-white me-2">文字顏色</label>
+        <input type="color" id="color" class="form-control form-control-color"
+              v-model="state.control.color">
+      </div>
+      <div class="btn-group m-2 align-items-center" role="group" aria-label="Second group">
+        <label for="bg-color" class="text-white me-2">背景顏色</label>
+            <input type="color" id="bg-color" class="form-control form-control-color"
+                v-model="state.control.bgColor">
+      </div>
+      <div class="btn-group m-2" role="group" aria-label="Second group">
+        <button id="italic" class="btn btn-primary btn-sm" @click="addHandler">斜體</button>
+        <button id="underline" class="btn btn-primary btn-sm" @click="addHandler">底線</button>
+      </div>
+      <div class="btn-group m-2" role="group" aria-label="Third group">
+        <button id="center" class="btn btn-primary btn-sm" @click="addHandler">置中</button>
+        <button id="left" class="btn btn-primary btn-sm" @click="addHandler">置左</button>
+        <button id="right" class="btn btn-primary btn-sm" @click="addHandler">置右</button>
+      </div>
     </div>
   </div>
 
   <!-- Modal -->
-  <div class="modal fade" id="bucketModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-       aria-labelledby="bucketModalLabel" aria-hidden="true" ref="bucket">
-    <div class="modal-dialog modal-fullscreen">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="bucketModalLabel">圖庫</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="offcanvas offcanvas-bottom rounded-3" tabindex="-1" id="bucketModal" aria-labelledby="bucketModalLabel" ref="bucket">
+        <div class="offcanvas-header border-bottom">
+          <h5 class="offcanvas-title" id="bucketModalLabel">圖庫</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="modal-body img_list">
+        <div class="offcanvas-body img_list">
           <ul class="">
             <li class="list-item cursor-pointer" v-for="(item,key) in state.bucket_data" :key="key"
                 @click="selected(item)" data-toggle="tooltip"
@@ -124,12 +177,18 @@
             </li>
           </ul>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" @click="insertImg">置入</button>
+        <div class="border-top p-3 d-flex justify-content-center">
+          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group me-2" role="group" aria-label="Second group">
+              <label for="imgLoader" title="上傳圖片" class="btn btn-outline-primary">上傳圖片</label>
+              <label for="bgImgLoader" title="上傳背景" class="btn btn-outline-primary">上傳背景</label>
+            </div>
+            <div class="btn-group" role="group" aria-label="Third group">
+              <button type="button" class="btn btn-primary" @click="insertImg">置入</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">取消</button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -138,7 +197,7 @@
 import {onMounted, reactive, ref, watch} from "vue";
 import {fabric} from 'fabric'
 import image_lists from './image_url.json'
-import {Modal} from 'bootstrap'
+import {Offcanvas} from 'bootstrap'
 
 export default {
   name      : "App",
@@ -168,7 +227,8 @@ export default {
       },
       undo: [],
       redo: [],
-      selected_obj_class: false
+      selected_obj_class: false,
+      open: false
     })
 
     watch(
@@ -228,6 +288,9 @@ export default {
         };
       };
       reader.readAsDataURL(e.target.files[0]);
+      
+      state.open = false;
+      bucketModal.hide();
     }
 
     function handleBgImage(e) {
@@ -265,6 +328,9 @@ export default {
         };
       };
       reader.readAsDataURL(e.target.files[0]);
+
+      state.open = false;
+      bucketModal.hide();
     }
 
     function onObjectSelected(e) {
@@ -279,8 +345,8 @@ export default {
       statusSave()
 
       let text = new fabric.IText('hello world', {
-        left: 40,
-        top : 100,
+        left: 100,
+        top : 200,
         // underline: true,
         fill: !canvas.backgroundColor && !canvas.backgroundImage ? 'black' : 'white'
       });
@@ -327,23 +393,11 @@ export default {
       let activeObject = canvas.getActiveObject(),
           activeGroup  = canvas.getActiveObjects();
       if (activeGroup.length === 1) {
-        if (
-            confirm(
-                "確定要刪除此物件嗎？"
-            )
-        ) {
-          canvas.remove(activeObject);
-        }
+        canvas.remove(activeObject);
       } else if (activeGroup.length > 1) {
-        if (
-            confirm(
-                "確定要刪除多個物件嗎？"
-            )
-        ) {
-          activeGroup.forEach(function (object) {
-            canvas.remove(object);
-          });
-        }
+        activeGroup.forEach(function (object) {
+          canvas.remove(object);
+        })
       }
     }
 
@@ -460,6 +514,8 @@ export default {
       canvas.getActiveObject().sendBackwards();
     }
 
+
+
     // mounted
     onMounted(() => {
       // 啟動 canvas
@@ -505,9 +561,10 @@ export default {
 
 
       // 監聽 bucketModal
-      bucketModal = new Modal(bucket.value)
-      bucket.value.addEventListener('hide.bs.modal', function () {
+      bucketModal = new Offcanvas(bucket.value)
+      bucket.value.addEventListener('hide.bs.offcanvas', function () {
         // do something...
+        state.open = false
         state.selected_img.selected = false
         state.selected_img = []
       })
@@ -550,7 +607,7 @@ export default {
       doUndo,
       doRedo,
       bringForward,
-      sendBackwards
+      sendBackwards,
     };
   },
 };
@@ -585,8 +642,8 @@ body {
 .controls {
   /*overflow: hidden;*/
   position: fixed;
-  right: 2rem;
-  top: 2rem;
+  right: 1.5rem;
+  top: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -698,8 +755,250 @@ body {
 /* textMenu */
 #textMenu {
   position: fixed;
-  bottom: 2rem;
+  bottom: 1rem;
   width: 100%;
 
+}
+
+.base {
+  z-index: 90;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: #ffffff;
+  width: 98px;
+  height: 98px;
+  transition: all 1s cubic-bezier(0.5, -0.75, 0.05, 1);
+  border-bottom-right-radius: 100%;
+}
+.base .menu {
+  z-index: 100;
+  background-color: #ffffff;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100px;
+  height: 100px;
+  border-bottom-right-radius: 200px;
+  cursor: pointer;
+  transition: all 1s cubic-bezier(0.5, -0.75, 0.05, 1), background-color 1s ease;
+}
+.base .menu .icon {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-100%, -100%);
+}
+.base .menu .icon:before, .base .menu .icon:after {
+  content: "";
+  transform: rotate(0deg);
+  transition: top 0.5s ease 0.5s, transform 0.5s ease, background-color 0.75s ease 0.25s;
+}
+.base .menu .icon .bar, .base .menu .icon:before, .base .menu .icon:after {
+  position: absolute;
+  height: 5px;
+  left: 0px;
+  right: 0px;
+  border-radius: 5px;
+  background-color: #21264b;
+}
+.base .menu .icon .bar {
+  transition: opacity 0s linear 0.5s, background-color 0.75s ease 0.25s;
+  opacity: 1;
+  top: 10px;
+}
+.base .menu .icon:before {
+  top: 0px;
+}
+.base .menu .icon:after {
+  top: initial;
+  top: 20px;
+}
+.base .icons {
+  z-index: 98;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.base .icons > * {
+  position: absolute;
+  font-size: 40px;
+  color: #21264b;
+  transition: 0.3s cubic-bezier(0.5, -0.25, 0.05, 1);
+}
+.base .icons .fa-images {
+  top: 10px;
+  left: 0px;
+  transition-delay: 0.2s;
+}
+.base .icons .fa-font {
+  top: 0px;
+  left: 0px;
+  color: #fff;
+  transition-delay: 0.1s;
+}
+.base .icons .fa-save {
+  top: 0px;
+  left: 10px;
+}
+.base .section {
+  z-index: 96;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 0px;
+  width: 0px;
+  transform-origin: 100% 100%;
+  transform: rotate(135deg);
+}
+.base .section .cover1 {
+  transform-origin: 100% 100%;
+}
+.base .section .cover1,
+.base .section .cover1 .cover2,
+.base .section .cover1 .cover2 .content {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+}
+.base .section .cover1,
+.base .section .cover1 .cover2 {
+  top: 50%;
+  left: 50%;
+  transform: translate(-100%, -100%) rotate(4deg);
+  overflow: hidden;
+  pointer-events: none;
+  transition: transform 0.5s ease-in;
+}
+.base .section .cover1 .cover2 {
+  transform: translate(50%, -50%) rotate(-8deg);
+  transform-origin: 0% 100%;
+}
+.base .section .cover1 .cover2 .content {
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+  background-color: #ee1b59;
+  top: 100%;
+  left: 0%;
+  transform: translate(-50%, -50%);
+  transition: background-color 0s, width 1.5s cubic-bezier(0.5, -0.5, 0.05, 1) 0s, height 1.5s cubic-bezier(0.5, -0.5, 0.05, 1) 0s;
+  pointer-events: auto;
+}
+.base .section-static {
+  z-index: 94;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  transform-origin: 0% 0%;
+  transition: width 1s cubic-bezier(0.5, -0.75, 0.05, 1), height 1s cubic-bezier(0.5, -0.75, 0.05, 1);
+}
+.base .section-static:hover {
+  background-color: #eaeaea;
+}
+.base .section-static.top {
+  transform: rotate(-45deg);
+  border-bottom-right-radius: 400px;
+}
+.base .section-static.bottom {
+  transform: rotate(45deg);
+  border-bottom-right-radius: 400px;
+}
+.base.close {
+  width: 300px;
+  height: 300px;
+  transition: all 0.5s cubic-bezier(0.5, 0, 0.05, 1.75);
+}
+.base.close .menu {
+  width: 150px;
+  height: 150px;
+  transition: all 0.5s cubic-bezier(0.5, 0, 0.05, 1.75), background-color 0.5s ease;
+  background-color: #21264b;
+}
+.base.close .menu .icon .bar, .base.close .menu .icon:before, .base.close .menu .icon:after {
+  background-color: #ffffff;
+}
+.base.close .menu .icon .bar {
+  opacity: 0;
+}
+.base.close .menu .icon:before, .base.close .menu .icon:after {
+  transition: top 0.5s linear, transform 0.5s ease 0.5s, background-color 0.75s ease 0.25s;
+}
+.base.close .menu .icon:before {
+  top: 10px;
+  transform: rotate(-45deg);
+}
+.base.close .menu .icon:after {
+  top: 10px;
+  transform: rotate(45deg);
+}
+.base.close .icons {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.base.close .icons > * {
+  position: absolute;
+  font-size: 40px;
+  color: #21264b;
+  transition: 0.3s cubic-bezier(0.5, 0, 0.05, 1.75) 0.7s;
+  pointer-events: none;
+}
+.base.close .icons .fa-images {
+  top: 10px;
+  left: 200px;
+}
+.base.close .icons .fa-font {
+  top: 141px;
+  left: 141px;
+  color: #fff;
+  transition-delay: 0.65s;
+}
+.base.close .icons .fa-save {
+  top: 200px;
+  left: 10px;
+  transition-delay: 0.8s;
+}
+.base.close .section .cover1 {
+  transform-origin: 100% 100%;
+}
+.base.close .section .cover1,
+.base.close .section .cover1 .cover2,
+.base.close .section .cover1 .cover2 .content {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+}
+.base.close .section .cover1,
+.base.close .section .cover1 .cover2 {
+  top: 50%;
+  left: 50%;
+  transform: translate(-100%, -100%) rotate(16deg);
+  overflow: hidden;
+  transition: transform 0.5s ease-in 0.5s;
+}
+.base.close .section .cover1 .cover2 {
+  transform: translate(50%, -50%) rotate(-32deg);
+  transform-origin: 0% 100%;
+}
+.base.close .section .cover1 .cover2 .content {
+  border-radius: 100%;
+  background-color: #ee1b59;
+  top: 100%;
+  left: 0%;
+  transform: translate(-50%, -50%);
+  transition: background-color 0s, width 0.5s cubic-bezier(0.5, 0, 0.05, 1.75) 0.25s, height 0.5s cubic-bezier(0.5, 0, 0.05, 2) 0.25s;
+}
+.base.close .section .cover1 .cover2 .content:hover {
+  background-color: #dd1350;
+}
+.base.close .section-static {
+  width: 300px;
+  height: 300px;
+  transition: width 0.5s cubic-bezier(0.5, 0, 0.05, 2), height 0.5s cubic-bezier(0.5, 0, 0.05, 2);
 }
 </style>
