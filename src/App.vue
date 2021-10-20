@@ -765,15 +765,15 @@ body {
   position: fixed;
   top: 0px;
   left: 0px;
-  background-color: #ffffff;
+  background-color: #FFFFFF;
   width: 98px;
   height: 98px;
-  transition: all 1s cubic-bezier(0.5, -0.75, 0.05, 1);
+  transition: all 0.5s cubic-bezier(0.5, -0.75, 0.05, 1);
   border-bottom-right-radius: 100%;
 }
 .base .menu {
   z-index: 100;
-  background-color: #ffffff;
+  background-color: #FFFFFF;
   position: absolute;
   top: 0px;
   left: 0px;
@@ -781,7 +781,7 @@ body {
   height: 100px;
   border-bottom-right-radius: 200px;
   cursor: pointer;
-  transition: all 1s cubic-bezier(0.5, -0.75, 0.05, 1), background-color 1s ease;
+  transition: all 0.2s cubic-bezier(0.5, -0.75, 0.05, 1), background-color 0.2s ease;
 }
 .base .menu .icon {
   position: absolute;
@@ -802,10 +802,10 @@ body {
   left: 0px;
   right: 0px;
   border-radius: 5px;
-  background-color: #21264b;
+  background-color: #21264B;
 }
 .base .menu .icon .bar {
-  transition: opacity 0s linear 0.5s, background-color 0.75s ease 0.25s;
+  transition: opacity 0s linear 0.5s, background-color 0.5s ease 0.25s;
   opacity: 1;
   top: 10px;
 }
@@ -825,11 +825,11 @@ body {
 .base .icons > * {
   position: absolute;
   font-size: 40px;
-  color: #21264b;
+  color: #21264B;
   transition: 0.3s cubic-bezier(0.5, -0.25, 0.05, 1);
 }
 .base .icons .fa-images {
-  top: 10px;
+  top: 35px;
   left: 0px;
   transition-delay: 0.2s;
 }
@@ -841,7 +841,7 @@ body {
 }
 .base .icons .fa-save {
   top: 0px;
-  left: 10px;
+  left: 35px;
 }
 .base .section {
   z-index: 96;
@@ -880,11 +880,11 @@ body {
   width: 150px;
   height: 150px;
   border-radius: 100%;
-  background-color: #ee1b59;
+  background-color: #EE1B59;
   top: 100%;
   left: 0%;
   transform: translate(-50%, -50%);
-  transition: background-color 0s, width 1.5s cubic-bezier(0.5, -0.5, 0.05, 1) 0s, height 1.5s cubic-bezier(0.5, -0.5, 0.05, 1) 0s;
+  transition: background-color 0s, width 0.5s cubic-bezier(0.5, -0.5, 0.05, 1) 0s, height 0.5s cubic-bezier(0.5, -0.5, 0.05, 1) 0s;
   pointer-events: auto;
 }
 .base .section-static {
@@ -895,10 +895,10 @@ body {
   top: 0px;
   left: 0px;
   transform-origin: 0% 0%;
-  transition: width 1s cubic-bezier(0.5, -0.75, 0.05, 1), height 1s cubic-bezier(0.5, -0.75, 0.05, 1);
+  transition: width 0.5s cubic-bezier(0.5, -0.75, 0.05, 1), height 0.5s cubic-bezier(0.5, -0.75, 0.05, 1);
 }
 .base .section-static:hover {
-  background-color: #eaeaea;
+  background-color: #EAEAEA;
 }
 .base .section-static.top {
   transform: rotate(-45deg);
@@ -917,16 +917,16 @@ body {
   width: 150px;
   height: 150px;
   transition: all 0.5s cubic-bezier(0.5, 0, 0.05, 1.75), background-color 0.5s ease;
-  background-color: #21264b;
+  background-color: #21264B;
 }
 .base.close .menu .icon .bar, .base.close .menu .icon:before, .base.close .menu .icon:after {
-  background-color: #ffffff;
+  background-color: #FFFFFF;
 }
 .base.close .menu .icon .bar {
   opacity: 0;
 }
 .base.close .menu .icon:before, .base.close .menu .icon:after {
-  transition: top 0.5s linear, transform 0.5s ease 0.5s, background-color 0.75s ease 0.25s;
+  transition: top 0.5s linear, transform 0.5s ease 0.5s, background-color 0.5s ease 0.25s;
 }
 .base.close .menu .icon:before {
   top: 10px;
@@ -944,24 +944,24 @@ body {
 .base.close .icons > * {
   position: absolute;
   font-size: 40px;
-  color: #21264b;
-  transition: 0.3s cubic-bezier(0.5, 0, 0.05, 1.75) 0.7s;
+  color: #21264B;
+  transition: 0.3s cubic-bezier(0.5, 0, 0.05, 1.75) 0.5s;
   pointer-events: none;
 }
 .base.close .icons .fa-images {
-  top: 10px;
+  top: 35px;
   left: 200px;
 }
 .base.close .icons .fa-font {
   top: 141px;
   left: 141px;
   color: #fff;
-  transition-delay: 0.65s;
+  transition-delay: 0.5s;
 }
 .base.close .icons .fa-save {
   top: 200px;
-  left: 10px;
-  transition-delay: 0.8s;
+  left: 35px;
+  transition-delay: 0.5s;
 }
 .base.close .section .cover1 {
   transform-origin: 100% 100%;
@@ -987,18 +987,18 @@ body {
 }
 .base.close .section .cover1 .cover2 .content {
   border-radius: 100%;
-  background-color: #ee1b59;
+  background-color: #EE1B59;
   top: 100%;
   left: 0%;
   transform: translate(-50%, -50%);
   transition: background-color 0s, width 0.5s cubic-bezier(0.5, 0, 0.05, 1.75) 0.25s, height 0.5s cubic-bezier(0.5, 0, 0.05, 2) 0.25s;
 }
 .base.close .section .cover1 .cover2 .content:hover {
-  background-color: #dd1350;
+  background-color: #DD1350;
 }
 .base.close .section-static {
   width: 300px;
   height: 300px;
-  transition: width 0.5s cubic-bezier(0.5, 0, 0.05, 2), height 0.5s cubic-bezier(0.5, 0, 0.05, 2);
+  transition: width 1.25s cubic-bezier(0.5, 0, 0.05, 2), height 0.5s cubic-bezier(0.5, 0, 0.05, 2);
 }
 </style>
