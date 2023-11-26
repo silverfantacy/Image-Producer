@@ -1,0 +1,435 @@
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+body {
+  /*background-image: url("https://drive.google.com/uc?export=view&id=0B3ubyt3iIvkaSjRtQThYR1ZTRGs");*/
+}
+
+.hideOperations {
+  display: none;
+}
+
+.displayOperations {
+  display: block;
+}
+
+.editor-area {
+  overflow: hidden;
+  /* float: left; */
+}
+
+.controls {
+  /*overflow: hidden;*/
+  position: fixed;
+  right: 1.5rem;
+  top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.canvas-bg-wrapper {
+  position: relative;
+  /*width: 600px;*/
+  /*height: 560px;*/
+}
+
+.canvas-bg {
+  position: absolute;
+}
+
+.canvas-bg-wrapper {
+  /*padding: 20px;*/
+  /*top: 75px;*/
+  /*left: 155px;*/
+  /*border-style: solid;*/
+  /*border-width: 20px 20px 20px 20px;*/
+  /*-moz-border-image: url(https://drive.google.com/uc?export=view&id=0B3ubyt3iIvkabEZhbkJseW5IZWc) 19 22 21 19 round;*/
+  /*-webkit-border-image: url(https://drive.google.com/uc?export=view&id=0B3ubyt3iIvkabEZhbkJseW5IZWc) 19 22 21 19 round;*/
+  /*-o-border-image: url(https://drive.google.com/uc?export=view&id=0B3ubyt3iIvkabEZhbkJseW5IZWc) 19 22 21 19 round;*/
+  /*border-image: url(https://drive.google.com/uc?export=view&id=0B3ubyt3iIvkabEZhbkJseW5IZWc) 19 22 21 19 round;*/
+}
+
+#c {
+  position: relative;
+}
+
+.btn-circle {
+  width: 48px;
+  height: 48px;
+}
+
+.btn-circle+.btn-circle {
+  margin-top: 10px;
+}
+
+/* Modal Style*/
+#bucketModal {
+  height: 50%;
+  top: unset;
+  bottom: 0;
+}
+
+.img_list,
+.img_info {
+  height: 500px;
+  overflow-y: auto;
+  padding: 0 12px;
+}
+
+.img_list ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-auto-rows: minmax(50px, auto);
+}
+
+.img_list ul .list-item {
+  position: relative;
+  border: 1px solid #e8ebf1;
+  cursor: pointer;
+}
+
+.img_list ul .list-item img {
+  /*position: absolute;*/
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.img_list ul .list-item .selected {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.img_info p {
+  word-break: break-all;
+  text-align: justify;
+}
+
+.img_info_container {
+  padding-bottom: 32px;
+}
+
+.img_info_container .image {
+  cursor: auto;
+}
+
+.img_info_btn {
+  position: absolute;
+  right: 16px;
+  bottom: 0;
+}
+
+
+/* textMenu */
+#textMenu {
+  position: fixed;
+  bottom: 1rem;
+  width: 100%;
+
+}
+
+.base {
+  z-index: 90;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: #FFFFFF;
+  width: 98px;
+  height: 98px;
+  transition: all 0.5s cubic-bezier(0.5, -0.75, 0.05, 1);
+  border-bottom-right-radius: 100%;
+}
+
+.base .menu {
+  z-index: 100;
+  background-color: #FFFFFF;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100px;
+  height: 100px;
+  border-bottom-right-radius: 200px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.5, -0.75, 0.05, 1), background-color 0.2s ease;
+}
+
+.base .menu .icon {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-100%, -100%);
+}
+
+.base .menu .icon:before,
+.base .menu .icon:after {
+  content: "";
+  transform: rotate(0deg);
+  transition: top 0.5s ease 0.5s, transform 0.5s ease, background-color 0.75s ease 0.25s;
+}
+
+.base .menu .icon .bar,
+.base .menu .icon:before,
+.base .menu .icon:after {
+  position: absolute;
+  height: 5px;
+  left: 0px;
+  right: 0px;
+  border-radius: 5px;
+  background-color: #21264B;
+}
+
+.base .menu .icon .bar {
+  transition: opacity 0s linear 0.5s, background-color 0.5s ease 0.25s;
+  opacity: 1;
+  top: 10px;
+}
+
+.base .menu .icon:before {
+  top: 0px;
+}
+
+.base .menu .icon:after {
+  top: initial;
+  top: 20px;
+}
+
+.base .icons {
+  z-index: 98;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.base .icons>* {
+  position: absolute;
+  font-size: 40px;
+  color: #21264B;
+  transition: 0.3s cubic-bezier(0.5, -0.25, 0.05, 1);
+}
+
+.base .icons .fa-images {
+  top: 35px;
+  left: 0px;
+  transition-delay: 0.2s;
+}
+
+.base .icons .fa-font {
+  top: 0px;
+  left: 0px;
+  color: #fff;
+  transition-delay: 0.1s;
+}
+
+.base .icons .fa-save {
+  top: 0px;
+  left: 35px;
+}
+
+.base .section {
+  z-index: 96;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 0px;
+  width: 0px;
+  transform-origin: 100% 100%;
+  transform: rotate(135deg);
+}
+
+.base .section .cover1 {
+  transform-origin: 100% 100%;
+}
+
+.base .section .cover1,
+.base .section .cover1 .cover2,
+.base .section .cover1 .cover2 .content {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+}
+
+.base .section .cover1,
+.base .section .cover1 .cover2 {
+  top: 50%;
+  left: 50%;
+  transform: translate(-100%, -100%) rotate(4deg);
+  overflow: hidden;
+  pointer-events: none;
+  transition: transform 0.5s ease-in;
+}
+
+.base .section .cover1 .cover2 {
+  transform: translate(50%, -50%) rotate(-8deg);
+  transform-origin: 0% 100%;
+}
+
+.base .section .cover1 .cover2 .content {
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+  background-color: #EE1B59;
+  top: 100%;
+  left: 0%;
+  transform: translate(-50%, -50%);
+  transition: background-color 0s, width 0.5s cubic-bezier(0.5, -0.5, 0.05, 1) 0s, height 0.5s cubic-bezier(0.5, -0.5, 0.05, 1) 0s;
+  pointer-events: auto;
+}
+
+.base .section-static {
+  z-index: 94;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  transform-origin: 0% 0%;
+  transition: width 0.5s cubic-bezier(0.5, -0.75, 0.05, 1), height 0.5s cubic-bezier(0.5, -0.75, 0.05, 1);
+}
+
+.base .section-static:hover {
+  background-color: #EAEAEA;
+}
+
+.base .section-static.top {
+  transform: rotate(-45deg);
+  border-bottom-right-radius: 400px;
+}
+
+.base .section-static.bottom {
+  transform: rotate(45deg);
+  border-bottom-right-radius: 400px;
+}
+
+.base.close {
+  width: 300px;
+  height: 300px;
+  transition: all 0.5s cubic-bezier(0.5, 0, 0.05, 1.75);
+}
+
+.base.close .menu {
+  width: 150px;
+  height: 150px;
+  transition: all 0.5s cubic-bezier(0.5, 0, 0.05, 1.75), background-color 0.5s ease;
+  background-color: #21264B;
+}
+
+.base.close .menu .icon .bar,
+.base.close .menu .icon:before,
+.base.close .menu .icon:after {
+  background-color: #FFFFFF;
+}
+
+.base.close .menu .icon .bar {
+  opacity: 0;
+}
+
+.base.close .menu .icon:before,
+.base.close .menu .icon:after {
+  transition: top 0.5s linear, transform 0.5s ease 0.5s, background-color 0.5s ease 0.25s;
+}
+
+.base.close .menu .icon:before {
+  top: 10px;
+  transform: rotate(-45deg);
+}
+
+.base.close .menu .icon:after {
+  top: 10px;
+  transform: rotate(45deg);
+}
+
+.base.close .icons {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.base.close .icons>* {
+  position: absolute;
+  font-size: 40px;
+  color: #21264B;
+  transition: 0.3s cubic-bezier(0.5, 0, 0.05, 1.75) 0.5s;
+  pointer-events: none;
+}
+
+.base.close .icons .fa-images {
+  top: 35px;
+  left: 200px;
+}
+
+.base.close .icons .fa-font {
+  top: 141px;
+  left: 141px;
+  color: #fff;
+  transition-delay: 0.5s;
+}
+
+.base.close .icons .fa-save {
+  top: 200px;
+  left: 35px;
+  transition-delay: 0.5s;
+}
+
+.base.close .section .cover1 {
+  transform-origin: 100% 100%;
+}
+
+.base.close .section .cover1,
+.base.close .section .cover1 .cover2,
+.base.close .section .cover1 .cover2 .content {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+}
+
+.base.close .section .cover1,
+.base.close .section .cover1 .cover2 {
+  top: 50%;
+  left: 50%;
+  transform: translate(-100%, -100%) rotate(16deg);
+  overflow: hidden;
+  transition: transform 0.5s ease-in 0.5s;
+}
+
+.base.close .section .cover1 .cover2 {
+  transform: translate(50%, -50%) rotate(-32deg);
+  transform-origin: 0% 100%;
+}
+
+.base.close .section .cover1 .cover2 .content {
+  border-radius: 100%;
+  background-color: #EE1B59;
+  top: 100%;
+  left: 0%;
+  transform: translate(-50%, -50%);
+  transition: background-color 0s, width 0.5s cubic-bezier(0.5, 0, 0.05, 1.75) 0.25s, height 0.5s cubic-bezier(0.5, 0, 0.05, 2) 0.25s;
+}
+
+.base.close .section .cover1 .cover2 .content:hover {
+  background-color: #DD1350;
+}
+
+.base.close .section-static {
+  width: 300px;
+  height: 300px;
+  transition: width 1.25s cubic-bezier(0.5, 0, 0.05, 2), height 0.5s cubic-bezier(0.5, 0, 0.05, 2);
+}
