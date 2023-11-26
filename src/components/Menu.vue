@@ -25,7 +25,7 @@ const toggleOpen = () => {
     <div class="icons">
       <font-awesome-icon icon="images" />
       <font-awesome-icon icon="font" />
-      <font-awesome-icon icon="save" />
+      <font-awesome-icon icon="download" />
     </div>
     <div class="section">
       <div class="cover1">

@@ -1,52 +1,3 @@
-<template>
-  <div id="canvas-wrapper" class="editor-area">
-    <div class="canvas-bg-wrapper h-100">
-      <canvas :width="state.width" :height="state.height" ref="c"></canvas>
-    </div>
-  </div>
-
-  <Menu ref="menu" v-model:open="state.openNav" @insertText="insertText" @output="output" />
-
-  <!-- 通用控制 -->
-  <div class="controls">
-    <input type="file" id="imgLoader" @change="handleImage" class="d-none" accept=".jpg, .jpeg, .png, .bmp" />
-    <input type="file" id="bgImgLoader" @change="handleBgImage" class="d-none" accept=".jpg, .jpeg, .png, .bmp" />
-
-    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
-      title="移除背景" @click="clearCanvasBackground">
-      <font-awesome-icon icon="chess-board" size="lg" fixed-width />
-    </button>
-    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
-      :class="{ 'd-none': !state.selected_obj_class }" title="刪除" @click="deleteObjects">
-      <font-awesome-icon icon="trash-alt" size="lg" fixed-width />
-    </button>
-    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
-      :class="{ 'd-none': !state.selected_obj_class }" title="上移" @click="bringForward">
-      <font-awesome-icon icon="caret-square-up" size="lg" fixed-width />
-    </button>
-    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
-      :class="{ 'd-none': !state.selected_obj_class }" title="下移" @click="sendBackwards">
-      <font-awesome-icon icon="caret-square-down" size="lg" fixed-width />
-    </button>
-    <button v-if="!!state.undo.length"
-      class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center" title="返回"
-      @click="doUndo()">
-      <font-awesome-icon icon="undo" size="lg" fixed-width />
-    </button>
-    <button v-if="!!state.redo.length"
-      class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center" title="重做"
-      @click="doRedo()">
-      <font-awesome-icon icon="redo" size="lg" fixed-width />
-    </button>
-  </div>
-
-  <!-- 文字控制選項 -->
-  <TextControls :open="state.hideOperations" :control="state.control" @addHandler="addHandler" />
-
-  <!-- 圖庫 -->
-  <BucketModal :open="state.openBucket" @closeNav="state.openNav = false" @insertImg="insertImg" />
-</template>
-
 <script setup>
 import { onMounted, reactive, ref, watch } from "vue";
 
@@ -296,6 +247,7 @@ function insertImg(selected_img) {
     canvas.add(image);
     canvas.renderAll();
 
+    statusSave()
   }, {
     crossOrigin: 'Anonymous'
   });
@@ -414,3 +366,52 @@ onMounted(() => {
   });
 });
 </script>
+
+<template>
+  <div id="canvas-wrapper" class="editor-area">
+    <div class="canvas-bg-wrapper h-100">
+      <canvas :width="state.width" :height="state.height" ref="c"></canvas>
+    </div>
+  </div>
+
+  <Menu ref="menu" v-model:open="state.openNav" @insertText="insertText" @output="output" />
+
+  <!-- 通用控制 -->
+  <div class="controls">
+    <input type="file" id="imgLoader" @change="handleImage" class="d-none" accept=".jpg, .jpeg, .png, .bmp" />
+    <input type="file" id="bgImgLoader" @change="handleBgImage" class="d-none" accept=".jpg, .jpeg, .png, .bmp" />
+
+    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
+      title="移除背景" @click="clearCanvasBackground">
+      <font-awesome-icon icon="chess-board" size="lg" fixed-width />
+    </button>
+    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
+      :class="{ 'd-none': !state.selected_obj_class }" title="刪除" @click="deleteObjects">
+      <font-awesome-icon icon="trash-alt" size="lg" fixed-width />
+    </button>
+    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
+      :class="{ 'd-none': !state.selected_obj_class }" title="上移" @click="bringForward">
+      <font-awesome-icon icon="caret-square-up" size="lg" fixed-width />
+    </button>
+    <button class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center"
+      :class="{ 'd-none': !state.selected_obj_class }" title="下移" @click="sendBackwards">
+      <font-awesome-icon icon="caret-square-down" size="lg" fixed-width />
+    </button>
+    <button v-if="!!state.undo.length"
+      class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center" title="返回"
+      @click="doUndo()">
+      <font-awesome-icon icon="undo" size="lg" fixed-width />
+    </button>
+    <button v-if="!!state.redo.length"
+      class="btn btn-primary rounded-circle btn-circle d-flex justify-content-center align-items-center" title="重做"
+      @click="doRedo()">
+      <font-awesome-icon icon="redo" size="lg" fixed-width />
+    </button>
+  </div>
+
+  <!-- 文字控制選項 -->
+  <TextControls :open="state.hideOperations" :control="state.control" @addHandler="addHandler" />
+
+  <!-- 圖庫 -->
+  <BucketModal :open="state.openBucket" @closeNav="state.openNav = false" @insertImg="insertImg" />
+</template>

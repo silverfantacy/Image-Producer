@@ -2,7 +2,7 @@
 
 ## Project setup
 ```
-pnpm install
+pnpm install --frozen-lockfile
 ```
 
 ### Compiles and hot-reloads for development
